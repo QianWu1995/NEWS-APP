@@ -1,18 +1,31 @@
 package com.example.qianwu.cookingrecipe;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.qianwu.cookingrecipe.Model.NewsItem;
 import com.example.qianwu.cookingrecipe.R;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.List;
+import okhttp3.OkHttpClient;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.OkHttpClient;
 
 public class NewsListActivity extends AppCompatActivity {
 
@@ -21,7 +34,8 @@ public class NewsListActivity extends AppCompatActivity {
     private String mNewsItems;
     private String uri1 = "https://newsapi.org/v1/articles?source=";
     private String uri2 = "&sortBy=top&apiKey=e7d800e8ee274c08a764d7fbb71fae77";
-
+    private ProgressDialog asyncDialog;
+    private JSONObject mJSONObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,5 +44,124 @@ public class NewsListActivity extends AppCompatActivity {
         header = (TextView) findViewById(R.id.editText);
         mNewsItems = getIntent().getStringExtra("type");
         header.setText(mNewsItems);
+        asyncDialog = new ProgressDialog(NewsListActivity.this);
+        new LongOperation().execute(uri1+mNewsItems+uri2);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        asyncDialog.dismiss();
+    }
+
+    private class initialzingOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            asyncDialog.dismiss();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setMessage("One moment");
+            asyncDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+    }
+    private class LongOperation extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            request(uri1+mNewsItems+uri2);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            asyncDialog.dismiss();
+            Log.d("data is ready",mJSONObject.toString());
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+
+            asyncDialog.setMessage("Loaing");
+
+            asyncDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+
+    }
+    public JSONObject request(String type){
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder().url(type).build();
+
+        okhttp3.Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Log.d("FAIL","TRUE");
+
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+
+                try {
+                    String jsonData = response.body().string();
+                    //Response response = call.execute();
+                    if (response.isSuccessful()) {
+
+                        try{
+                            Log.d("jsonData is",jsonData);
+
+                            mJSONObject = new JSONObject(jsonData);
+                            Log.d("JSONOBJ is",mJSONObject.toString()); // mJSONObject is correct.
+
+                        }
+
+                        catch (Exception e){
+                            Log.d("exception caught","1");
+                        }
+
+
+                    }
+                    else{
+                        Log.d("jsonData is","not successful");
+                    }
+                }
+                catch (IOException e) {
+
+                    Log.d("exception caught","2");
+                }
+
+            }
+        });
+        return mJSONObject;
+    }
+
+
 }

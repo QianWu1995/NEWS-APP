@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button entertainingChannel;
     private Button scienceChannel;
 
-    private JSONObject mJSONObject;
+
     private ArrayList<Parcelable> mNewsItems;
     private Intent i;
     private ProgressDialog asyncDialog;
@@ -133,88 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         asyncDialog.dismiss();
     }
 
-    /*private class LongOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            request(params[0]);
-
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            i.putExtra("obj",mJSONObject.toString());
-            asyncDialog.dismiss();
-
-            startActivity(i);
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-
-            asyncDialog.setMessage("Loaing");
-
-            asyncDialog.show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-
-        }
-    }*/
-    /*public JSONObject request(String type){
-
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder().url(type).build();
-
-        okhttp3.Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Log.d("FAIL","TRUE");
-
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-
-                try {
-                    String jsonData = response.body().string();
-                    //Response response = call.execute();
-                    if (response.isSuccessful()) {
-
-                        try{
-                            Log.d("jsonData is",jsonData);
-
-                            mJSONObject = new JSONObject(jsonData);
-                            Log.d("JSONOBJ is",mJSONObject.toString()); // mJSONObject is correct.
-
-                        }
-
-                        catch (Exception e){
-                            Log.d("exception caught","1");
-                        }
-
-
-                    }
-                    else{
-                        Log.d("jsonData is","not successful");
-                    }
-                }
-                catch (IOException e) {
-
-                    Log.d("exception caught","2");
-                }
-
-            }
-        });
-        return mJSONObject;
-    }*/
 
 
     private boolean isNetworkAvailable() {
