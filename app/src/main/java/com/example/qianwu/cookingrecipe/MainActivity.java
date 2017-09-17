@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button techChannel;
     private Button entertainingChannel;
     private Button scienceChannel;
-    private String uri1 = "https://newsapi.org/v1/articles?source=";
-    private String uri2 = "&sortBy=top&apiKey=e7d800e8ee274c08a764d7fbb71fae77";
+
     private JSONObject mJSONObject;
     private ArrayList<Parcelable> mNewsItems;
-
+    private Intent i;
+    private ProgressDialog asyncDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scienceChannel.setOnClickListener(this);
         mSearchView.setOnSearchClickListener(this);
         mNewsItems = new ArrayList<>();
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "No internet connection please try again.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        asyncDialog = new ProgressDialog(MainActivity.this);
     }
 
     @Override
@@ -105,28 +96,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(view != mSearchView){
+            i = new Intent(this, NewsListActivity.class);
+
+
+
+
             if(view == sportChannel){
-                new LongOperation().execute("espn");
-                Intent i = new Intent(this, NewsListActivity.class);
-                i.putParcelableArrayListExtra("obj",mNewsItems);
-                startActivity(i);
+                i.putExtra("type","espn");
             }
             if (view == businessChannel){
-
+                i.putExtra("type","business_insider");
             }
             if(view == trendingChannel){
-
+                i.putExtra("type","cnn");
             }
             if(view == techChannel){
-
+                i.putExtra("type","hacker-news");
             }
             if(view == entertainingChannel){
-
+                i.putExtra("type","buzzfeed");
             }
             if(view == scienceChannel){
-
+                i.putExtra("type","new-scientist");
             }
 
+            startActivity(i);
         }
         if(view == mSearchView){
 
@@ -134,33 +128,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onPause() {
+        super.onPause();
+        asyncDialog.dismiss();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    /*private class LongOperation extends AsyncTask<String, Void, String> {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    private class LongOperation extends AsyncTask<String, Void, String> {
-        ProgressDialog asyncDialog = new ProgressDialog(MainActivity.this);
         @Override
         protected String doInBackground(String... params) {
 
-            mJSONObject = request(params[0]);
+            request(params[0]);
 
             return "Executed";
         }
@@ -168,7 +146,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(String result) {
 
+            i.putExtra("obj",mJSONObject.toString());
             asyncDialog.dismiss();
+
+            startActivity(i);
         }
 
         @Override
@@ -183,15 +164,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onProgressUpdate(Void... values) {
 
-
-
         }
-    }
-    public JSONObject request(String type){
+    }*/
+    /*public JSONObject request(String type){
 
         OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder().url(uri1+type+uri2).build();
+        Request request = new Request.Builder().url(type).build();
 
         okhttp3.Call call = client.newCall(request);
         call.enqueue(new Callback() {
@@ -235,36 +214,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         return mJSONObject;
-    }
-    void populateNewItemsArray(){
-        JSONArray array = null;
-        try{
-            array = mJSONObject.getJSONArray("articles");
-        }
-        catch (Exception r){
-            Log.d("array","not retrieved");
-        }
+    }*/
 
-        try {
-
-            for(int i = 0; i< array.length();++i){
-                String heading,descp,author,url,urltoimg,date,source;
-                heading = array.getJSONObject(i).getString("title");
-                descp = array.getJSONObject(i).getString("description");
-                url = array.getJSONObject(i).getString("url");
-                urltoimg = array.getJSONObject(i).getString("urlToImage");
-                date = array.getJSONObject(i).getString("publishedAt");
-                author = array.getJSONObject(i).getString("author");
-                NewsItem n = new NewsItem(heading,descp,author,url,urltoimg,date,"espn",Topic.SPORTS);
-                mNewsItems.add(n);
-            }
-        }
-        catch (Exception r){
-
-            Log.d("not displaying","2");
-        }
-
-    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

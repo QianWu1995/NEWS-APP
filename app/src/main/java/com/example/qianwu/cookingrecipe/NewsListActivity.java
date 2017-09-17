@@ -18,26 +18,17 @@ public class NewsListActivity extends AppCompatActivity {
 
     private ListView mListView;
     private TextView header;
-    private ArrayList<Parcelable> mNewsItems;
-
+    private String mNewsItems;
+    private String uri1 = "https://newsapi.org/v1/articles?source=";
+    private String uri2 = "&sortBy=top&apiKey=e7d800e8ee274c08a764d7fbb71fae77";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
         mListView = (ListView) findViewById(R.id.listView);
-        header = (TextView)findViewById(R.id.editText);
-        mNewsItems = getIntent().getParcelableArrayListExtra("obj");
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                test();
-            }
-        });
-    }
-
-    void test(){
-        Log.d("ssss",mNewsItems.size()+"");
-
+        header = (TextView) findViewById(R.id.editText);
+        mNewsItems = getIntent().getStringExtra("type");
+        header.setText(mNewsItems);
     }
 }
