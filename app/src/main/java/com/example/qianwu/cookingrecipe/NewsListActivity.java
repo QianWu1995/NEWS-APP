@@ -2,6 +2,7 @@ package com.example.qianwu.cookingrecipe;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +59,14 @@ public class NewsListActivity extends AppCompatActivity {
         listViewAdapter customAdapter = new listViewAdapter(NewsListActivity.this, R.layout.activity_news_list, mNewsItemsArray);
 
         mListView .setAdapter(customAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent i2 = new Intent(NewsListActivity.this, WebviewActivity.class);
+                i2.putExtra("url",mNewsItemsArray.get(i).getUrl());
+                startActivity(i2);
+            }
+        });
     }
 
     @Override

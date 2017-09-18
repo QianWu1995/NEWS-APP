@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 i.putExtra("type","cnn");
             }
             if(view == techChannel){
-                i.putExtra("type","hacker-news");
+                i.putExtra("type","ign");
             }
             if(view == entertainingChannel){
                 i.putExtra("type","buzzfeed");
