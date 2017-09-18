@@ -1,6 +1,9 @@
 package com.example.qianwu.cookingrecipe;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +16,9 @@ import android.widget.TextView;
 
 import com.example.qianwu.cookingrecipe.Model.NewsItem;
 import com.example.qianwu.cookingrecipe.R;
+import com.example.qianwu.cookingrecipe.Support.listViewAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -36,6 +41,7 @@ public class NewsListActivity extends AppCompatActivity {
     private String uri2 = "&sortBy=top&apiKey=e7d800e8ee274c08a764d7fbb71fae77";
     private ProgressDialog asyncDialog;
     private JSONObject mJSONObject;
+    private ArrayList<NewsItem> mNewsItemsArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +51,12 @@ public class NewsListActivity extends AppCompatActivity {
         mNewsItems = getIntent().getStringExtra("type");
         header.setText(mNewsItems);
         asyncDialog = new ProgressDialog(NewsListActivity.this);
+        mNewsItemsArray = new ArrayList<>();
         new LongOperation().execute(uri1+mNewsItems+uri2);
+
+        listViewAdapter customAdapter = new listViewAdapter(NewsListActivity.this, R.layout.activity_news_list, mNewsItemsArray);
+
+        mListView .setAdapter(customAdapter);
     }
 
     @Override
@@ -54,11 +65,13 @@ public class NewsListActivity extends AppCompatActivity {
         asyncDialog.dismiss();
     }
 
+
+
     private class initialzingOperation extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
-
+            populateNewsitemArray();
             return "Executed";
         }
 
@@ -66,7 +79,7 @@ public class NewsListActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             asyncDialog.dismiss();
-
+            Log.d("first item",mNewsItemsArray.get(0).getHeading());
         }
 
         @Override
@@ -80,6 +93,8 @@ public class NewsListActivity extends AppCompatActivity {
 
         }
     }
+
+
     private class LongOperation extends AsyncTask<String, Void, String> {
 
 
@@ -93,9 +108,9 @@ public class NewsListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            asyncDialog.dismiss();
-            Log.d("data is ready",mJSONObject.toString());
 
+            asyncDialog.dismiss();
+            new initialzingOperation().execute();
         }
 
         @Override
@@ -113,7 +128,7 @@ public class NewsListActivity extends AppCompatActivity {
         }
 
     }
-    public JSONObject request(String type){
+    public void request(String type){
 
         OkHttpClient client = new OkHttpClient();
 
@@ -160,8 +175,41 @@ public class NewsListActivity extends AppCompatActivity {
 
             }
         });
-        return mJSONObject;
+
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
 
+    private void populateNewsitemArray(){
+        JSONArray array = null;
+        try{
+            array = mJSONObject.getJSONArray("articles");
+        }
+        catch (Exception r){
+            Log.d("array","not retrieved");
+        }
+        try {
+            for(int i = 0; i< array.length();++i){
+                String Heading, Descrption, author, url, urlToImage, Date, Source;
+                Heading = array.getJSONObject(i).getString("title");
+                Descrption = array.getJSONObject(i).getString("description");
+                author = array.getJSONObject(i).getString("author");
+                url = array.getJSONObject(i).getString("url");
+                urlToImage = array.getJSONObject(i).getString("urlToImage");
+                Date = array.getJSONObject(i).getString("publishedAt");
+                Source =  null;
+
+                NewsItem m = new NewsItem(Heading, Descrption, author, url, urlToImage, Date, Source,null);
+                mNewsItemsArray.add(m);
+            }
+        }
+        catch (Exception r){
+            Log.d("not displaying","2");
+        }
+    }
 }

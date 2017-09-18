@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scienceChannel.setOnClickListener(this);
         mSearchView.setOnSearchClickListener(this);
         mNewsItems = new ArrayList<>();
-        asyncDialog = new ProgressDialog(MainActivity.this);
     }
 
     @Override
@@ -94,18 +93,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setAction("Action", null).show();
             return;
         }
-
         if(view != mSearchView){
             i = new Intent(this, NewsListActivity.class);
-
-
-
-
             if(view == sportChannel){
                 i.putExtra("type","espn");
             }
             if (view == businessChannel){
-                i.putExtra("type","business_insider");
+                i.putExtra("type","business-insider");
             }
             if(view == trendingChannel){
                 i.putExtra("type","cnn");
@@ -123,14 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
         }
         if(view == mSearchView){
-
+            // search
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        asyncDialog.dismiss();
     }
 
 
