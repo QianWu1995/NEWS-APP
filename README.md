@@ -1,3 +1,7 @@
 # NEWS-APP
 
-![](https://ibb.co/iqe25b)
+![](https://i.imgur.com/m1vnqaq.png)
+
+![](https://i.imgur.com/lvyESs2.png)
+
+![](https://i.imgur.com/2okGz85.png)
