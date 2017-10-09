@@ -1,4 +1,4 @@
-package com.example.qianwu.cookingrecipe.Model;
+package com.robin.qianwu.cookingrecipe.Model;
 
 /**
  * Created by qianwu on 2017-09-13.

@@ -1,13 +1,9 @@
-package com.example.qianwu.cookingrecipe.Model;
-
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.robin.qianwu.cookingrecipe.Model;
 
 /**
  * Created by qianwu on 2017-09-13.
  */
-public class NewsItem implements Parcelable {
+public class NewsItem {
     private String Heading;
     private String Descrption;
     private String author;
@@ -94,49 +90,7 @@ public class NewsItem implements Parcelable {
     }
 
 
-    public NewsItem(Parcel in){
-        String[] data = new String[8];
-
-        in.readStringArray(data);
-        // the order needs to be the same as in writeToParcel() method
-        this.Heading = data[0];
-        this.Descrption = data[1];
-        this.author = data[2];
-        this.url = data[3];
-        this.urlToImage = data[4];
-        this.Date = data[5];
-        this.Source = data[6];
-        this.mTopic = null; // needs to be fixed
-    }
 
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringArray(new String[]{
-                this.Heading,
-                this.Descrption,
-                this.author,
-                this.url,
-                this.urlToImage,
-                this.Date,
-                this.Source,
-                null
-        });
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public NewsItem createFromParcel(Parcel in) {
-            return new NewsItem(in);
-        }
-
-        public NewsItem[] newArray(int size) {
-            return new NewsItem[size];
-        }
-    };
 }
 

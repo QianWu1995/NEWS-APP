@@ -1,4 +1,4 @@
-package com.example.qianwu.cookingrecipe;
+package com.robin.qianwu.cookingrecipe;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

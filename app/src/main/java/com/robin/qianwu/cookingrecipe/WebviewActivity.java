@@ -1,15 +1,12 @@
-package com.example.qianwu.cookingrecipe;
+package com.robin.qianwu.cookingrecipe;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 public class WebviewActivity extends AppCompatActivity {
 
@@ -22,7 +19,6 @@ public class WebviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webview = (WebView)findViewById(R.id.webView);
-        progressBar = ProgressDialog.show(WebviewActivity.this, "WebView Example", "Loading...");
         uri = getIntent().getStringExtra("url");
         WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -37,9 +33,6 @@ public class WebviewActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
                 Log.i(TAG, "Finished loading URL: " +url);
-                if (progressBar.isShowing()) {
-                    progressBar.dismiss();
-                }
             }
 
         });

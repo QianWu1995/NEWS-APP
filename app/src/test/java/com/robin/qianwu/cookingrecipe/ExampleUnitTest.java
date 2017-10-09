@@ -1,4 +1,4 @@
-package com.example.qianwu.cookingrecipe;
+package com.robin.qianwu.cookingrecipe;
 
 import org.junit.Test;
 

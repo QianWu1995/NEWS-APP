@@ -5,11 +5,11 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "com.example.qianwu.cookingrecipe"
+        applicationId "com.robin.qianwu.cookingrecipe"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.03"
     }
     buildTypes {
         release {

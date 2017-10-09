@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#00ffff"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.qianwu.cookingrecipe.MainActivity"
+    tools:context="com.robin.qianwu.cookingrecipe.MainActivity"
     tools:showIn="@layout/activity_main"
     android:orientation="vertical" >
     <SearchView
@@ -22,76 +22,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
-    <LinearLayout
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
-
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/Treding"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/trending"
-            android:layout_weight="1.0"
-            android:text="Trending"
-            android:allowUndo="true"
-            android:textColor="@color/abc_search_url_text_normal"/>
-
-        <Button
-            android:id="@+id/Business"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/business"
-            android:layout_weight="1.0"
-            android:text="Business"
-            android:textColor="#ffffff"/>
-        <Button
-            android:id="@+id/Tech"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/tech"
-            android:layout_weight="1.0"
-            android:text="Technology"
-            android:textColor="#ffffff"/>
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/Entertainment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/entertainment"
-            android:layout_weight="1.0"
-            android:text="Entertainment"
-            android:textColor="#ffffff"/>
-
-        <Button
-            android:id="@+id/Sport"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/sports"
-            android:layout_weight="1.0"
-            android:text="Sport"
-            android:textColor="#ffffff"/>
-        <Button
-            android:id="@+id/Science"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/science"
-            android:layout_weight="1.0"
-            android:text="Science"
-            android:textColor="#ffffff"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/listView2"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
 

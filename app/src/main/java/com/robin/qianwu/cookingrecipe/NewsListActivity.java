@@ -1,4 +1,4 @@
-package com.example.qianwu.cookingrecipe;
+package com.robin.qianwu.cookingrecipe;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,44 +6,39 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.qianwu.cookingrecipe.Model.NewsItem;
-import com.example.qianwu.cookingrecipe.R;
-import com.example.qianwu.cookingrecipe.Support.listViewAdapter;
+import com.robin.qianwu.cookingrecipe.Model.NewsItem;
+import com.robin.qianwu.cookingrecipe.Support.listViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.OkHttpClient;
 
 public class NewsListActivity extends AppCompatActivity {
 
     private ListView mListView;
     private TextView header;
-    private String mNewsItems;
+    private String mNewsItems,mNewItemsTitle;
     private String uri1 = "https://newsapi.org/v1/articles?source=";
     private String uri2 = "&sortBy=top&apiKey=e7d800e8ee274c08a764d7fbb71fae77";
-    private ProgressDialog asyncDialog;
+    public ProgressDialog asyncDialog;
     private JSONObject mJSONObject;
     private ArrayList<NewsItem> mNewsItemsArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,20 +46,26 @@ public class NewsListActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.listView);
         header = (TextView) findViewById(R.id.editText);
         mNewsItems = getIntent().getStringExtra("type");
-        header.setText(mNewsItems);
+        mNewItemsTitle = getIntent().getStringExtra("title");
+        header.setText(mNewItemsTitle);
         asyncDialog = new ProgressDialog(NewsListActivity.this);
         mNewsItemsArray = new ArrayList<>();
-        new LongOperation().execute(uri1+mNewsItems+uri2);
+        new LongOperation().execute(mNewsItems);
 
-        listViewAdapter customAdapter = new listViewAdapter(NewsListActivity.this, R.layout.activity_news_list, mNewsItemsArray);
 
-        mListView .setAdapter(customAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent i2 = new Intent(NewsListActivity.this, WebviewActivity.class);
-                i2.putExtra("url",mNewsItemsArray.get(i).getUrl());
-                startActivity(i2);
+                if(isNetworkAvailable() == true){
+
+                    Intent i2 = new Intent(NewsListActivity.this, WebviewActivity.class);
+                    i2.putExtra("url",mNewsItemsArray.get(i).getUrl());
+                    startActivity(i2);
+                }
+                else{
+                    asyncDialog.setMessage("Internet is not available please try again later.");
+                }
+
             }
         });
     }
@@ -76,6 +77,39 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
 
+
+    private void populateNewsitemArray(){
+        JSONArray array = null;
+        while(mJSONObject == null){
+        }
+        try{
+            array = mJSONObject.getJSONArray("articles");
+        }
+        catch (Exception r){
+            Log.d("array","not retrieved");
+        }
+
+        try {
+            for(int i = 0; i< array.length();++i){
+                String Heading, Descrption, author, url, urlToImage, Date, Source;
+                Heading = array.getJSONObject(i).getString("title");
+                Descrption = array.getJSONObject(i).getString("description");
+                author = array.getJSONObject(i).getString("author");
+                url = array.getJSONObject(i).getString("url");
+                urlToImage = array.getJSONObject(i).getString("urlToImage");
+                Date = array.getJSONObject(i).getString("publishedAt");
+                Source =  null;
+
+                Log.d("heading is ",Heading);
+                NewsItem m = new NewsItem(Heading, Descrption, author, url, urlToImage, Date, Source,null);
+                mNewsItemsArray.add(m);
+            }
+        }
+        catch (Exception r){
+            r.printStackTrace();
+            Log.d("not displaying","2");
+        }
+    }
 
     private class initialzingOperation extends AsyncTask<String, Void, String> {
 
@@ -89,7 +123,8 @@ public class NewsListActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             asyncDialog.dismiss();
-            Log.d("first item",mNewsItemsArray.get(0).getHeading());
+            listViewAdapter customAdapter = new listViewAdapter(NewsListActivity.this, R.layout.activity_news_list, mNewsItemsArray);
+            mListView.setAdapter(customAdapter);
         }
 
         @Override
@@ -105,13 +140,24 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
 
-    private class LongOperation extends AsyncTask<String, Void, String> {
+    private class LongOperation extends AsyncTask<String, Void, String> {// first entry
 
 
         @Override
         protected String doInBackground(String... params) {
 
-            request(uri1+mNewsItems+uri2);
+            if(!mNewsItems.equals("wirtschafts-woche") &&
+                    !mNewsItems.equals("the-next-web") &&
+                    !mNewsItems.equals("der-tagesspiegel") &&
+                    !mNewsItems.equals("handelsblatt")&&
+                    !mNewsItems.equals("die-zeit")){
+
+                request(uri1+mNewsItems+uri2);
+            }
+            else{
+                request(uri1+mNewsItems+"&sortBy=latest&apiKey=e7d800e8ee274c08a764d7fbb71fae77");
+
+            }
             return "Executed";
         }
 
@@ -152,6 +198,7 @@ public class NewsListActivity extends AppCompatActivity {
 
             }
 
+
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
 
@@ -164,7 +211,6 @@ public class NewsListActivity extends AppCompatActivity {
                             Log.d("jsonData is",jsonData);
 
                             mJSONObject = new JSONObject(jsonData);
-                            Log.d("JSONOBJ is",mJSONObject.toString()); // mJSONObject is correct.
 
                         }
 
@@ -195,31 +241,4 @@ public class NewsListActivity extends AppCompatActivity {
         return activeNetworkInfo != null;
     }
 
-    private void populateNewsitemArray(){
-        JSONArray array = null;
-        try{
-            array = mJSONObject.getJSONArray("articles");
-        }
-        catch (Exception r){
-            Log.d("array","not retrieved");
-        }
-        try {
-            for(int i = 0; i< array.length();++i){
-                String Heading, Descrption, author, url, urlToImage, Date, Source;
-                Heading = array.getJSONObject(i).getString("title");
-                Descrption = array.getJSONObject(i).getString("description");
-                author = array.getJSONObject(i).getString("author");
-                url = array.getJSONObject(i).getString("url");
-                urlToImage = array.getJSONObject(i).getString("urlToImage");
-                Date = array.getJSONObject(i).getString("publishedAt");
-                Source =  null;
-
-                NewsItem m = new NewsItem(Heading, Descrption, author, url, urlToImage, Date, Source,null);
-                mNewsItemsArray.add(m);
-            }
-        }
-        catch (Exception r){
-            Log.d("not displaying","2");
-        }
-    }
 }

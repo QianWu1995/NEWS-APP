@@ -1,4 +1,4 @@
-package com.example.qianwu.cookingrecipe.Support;
+package com.robin.qianwu.cookingrecipe.Support;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,12 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.qianwu.cookingrecipe.Model.NewsItem;
-import com.example.qianwu.cookingrecipe.R;
+import com.robin.qianwu.cookingrecipe.Model.NewsItem;
+import com.robin.qianwu.cookingrecipe.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by qianwu on 2017-09-17.
