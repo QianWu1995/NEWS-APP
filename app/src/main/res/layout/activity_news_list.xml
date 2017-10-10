@@ -9,8 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#00ffff"
-    tools:context=".NewsListActivity">
+    tools:context=".NewsListActivity"
+    android:background="#1c0303">
 
     <TextView
         android:layout_width="match_parent"
@@ -20,7 +20,9 @@
         android:textSize="20dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="NEWS"/>
+        android:text="NEWS"
+        android:textStyle="bold|italic"
+        android:textColor="@android:color/holo_blue_dark"/>
 
     <ListView
         android:layout_width="wrap_content"

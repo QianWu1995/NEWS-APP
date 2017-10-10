@@ -45,6 +45,7 @@ public class NewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_list);
         mListView = (ListView) findViewById(R.id.listView);
         header = (TextView) findViewById(R.id.editText);
+
         mNewsItems = getIntent().getStringExtra("type");
         mNewItemsTitle = getIntent().getStringExtra("title");
         header.setText(mNewItemsTitle);

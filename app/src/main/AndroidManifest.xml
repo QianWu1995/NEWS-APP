@@ -10,11 +10,11 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="News For All"
-        android:supportsRtl="true"
         android:screenOrientation="portrait"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.robin.qianwu.cookingrecipe.MainActivity"
+            android:name=".MainActivity"
             android:label="News"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,11 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.robin.qianwu.cookingrecipe.NewsListActivity">
+        <activity android:name=".NewsListActivity">
             android:configChanges="orientation"
             android:screenOrientation="portrait"
         </activity>
-        <activity android:name="com.robin.qianwu.cookingrecipe.WebviewActivity">
+        <activity android:name=".WebviewActivity">
             android:configChanges="orientation"
             android:screenOrientation="portrait"
         </activity>

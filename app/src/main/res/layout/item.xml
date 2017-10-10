@@ -22,7 +22,8 @@
         android:lineSpacingExtra="1dp"
         android:id="@+id/desc"
         android:layout_below="@+id/heading"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -34,6 +35,7 @@
         android:scrollHorizontally="true"
         android:ellipsize="end"
         android:layout_below="@+id/leftIco"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/holo_blue_dark"/>
 
 </RelativeLayout>
